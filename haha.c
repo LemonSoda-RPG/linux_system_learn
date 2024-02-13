@@ -2,6 +2,7 @@
 #include<stdlib.h>
 int main()
 {
-	printf("hello world!\n");
+	int i=10;
+	printf("%d\nhello world!\n",i);
 	exit(0);
 }
