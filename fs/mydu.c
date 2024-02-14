@@ -63,6 +63,8 @@ static int64_t mydu(const char *pathname)
         if(noloop(globres.gl_pathv[i]))
             sum += mydu(globres.gl_pathv[i]);
     }
+    //释放内存
+    globfree(&globres);
     
     return sum;
 
