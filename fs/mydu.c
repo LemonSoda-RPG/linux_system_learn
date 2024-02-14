@@ -23,7 +23,8 @@ static int noloop(const char *s)
 static int64_t mydu(const char *pathname)
 {
     // 首先判断path是否为目录
-    struct stat statres;
+    
+    static struct stat statres;
     char nextpath[PATHSIZE];
     if(lstat(pathname,&statres)<0)
     {
@@ -53,13 +54,16 @@ static int64_t mydu(const char *pathname)
         fprintf(stderr,"glob error");
         exit(1);          
     }
+    sum = statres.st_blocks;
 
+
+    printf("%d\n",i);
     for(int i=0;i<globres.gl_pathc;i++)
     {
         if(noloop(globres.gl_pathv[i]))
             sum += mydu(globres.gl_pathv[i]);
     }
-    sum += statres.st_blocks;
+    
     return sum;
 
         
