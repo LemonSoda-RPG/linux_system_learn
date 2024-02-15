@@ -3,6 +3,8 @@
 #include <stdio.h>
 int main()
 {
+
+    
     struct passwd *passres;
     passres = getpwnam("jc");
     printf("%s\n",passres->pw_name);
