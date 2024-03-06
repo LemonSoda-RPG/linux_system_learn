@@ -2,6 +2,7 @@
 #include<stdio.h>
 #include <time.h>
 #include <stdint.h>
+//通过计时计算5秒中能++多少次
 int main()
 {
     time_t end;

@@ -7,7 +7,6 @@
 // #include<sys/stat.h>
 int main(int argc,char **argv)
 {
-  
 	if(argc<3)
 	{
 		fprintf(stderr, "写入错误\n");
@@ -27,7 +26,6 @@ int main(int argc,char **argv)
 		close(fd1);
 		exit(1);
 	}
-
 	while(1)
 	{
 		int len = read(fd1,buf,BUFFERSIZE);
@@ -40,9 +38,8 @@ int main(int argc,char **argv)
 		{
 			break;
 		}
-		
 		printf("%s\n",buf);
-		sleep(5);
+		
 		int len2 = write(fd2,buf,len);
 		if(len2!=len)
 		{
@@ -50,13 +47,8 @@ int main(int argc,char **argv)
 			break;
 		}
 
-
 	}
-
-
-
-
-  close(fd1);
-  close(fd2);
-  exit(0);
+	close(fd1);
+	close(fd2);
+	exit(0);
 }
