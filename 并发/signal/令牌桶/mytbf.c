@@ -7,4 +7,14 @@ struct mytbf_st
     int cps;
     int token;
     int burst;
+};
+
+mytbf_fetchtoken()
+{
+
+}
+
+mytbf_returntoken()
+{
+    
 }
