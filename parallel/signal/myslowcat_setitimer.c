@@ -2,30 +2,43 @@
 #include <stdlib.h>
 #include <fcntl.h>
 #include <unistd.h>
+#include <sys/time.h>
 #include <errno.h>
 #include <signal.h>
-#include "tbf/mytbf.h"
-#define CPS 	   100  //每秒加10个token  一个token是第一个字符
+#define CPS 	   10
 #define BUFFERSIZE CPS
-#define BURST      1024
-
+static volatile int  loop = 0; 
+static void alrm_handler(int s)
+{	
+	loop = 1;
+}
 int main(int argc,char **argv)
 {
 	int fd1,fd2=1;
-	int len,size;
+	struct itimerval itst;
+	// struct itimerval itstold;
+	int len;
 	char buf[BUFFERSIZE];
-    struct mytbf_st* tbf;
 	if(argc<2)
 	{
 		fprintf(stderr, "写入错误\n");
 		exit(1);
 	}
-    tbf = mytbf_init(CPS,BURST);
-	if(tbf==NULL)
+
+	signal(SIGALRM,alrm_handler);
+	// alarm(1);
+	itst.it_interval.tv_sec =1;
+	itst.it_interval.tv_usec = 0;
+	itst.it_value.tv_sec = 1;
+	itst.it_value.tv_usec = 0;
+	// it_value的值耗尽之后 发送信号 且it_interval的值会赋值给it_value
+	// 
+	if(setitimer(ITIMER_REAL,&itst,NULL)<0)
 	{
-		perror("mytbf_init");
+		perror("setitimer()");
 		exit(1);
 	}
+
 	do
 	{
 		fd1 = open(argv[1],O_RDONLY);
@@ -41,8 +54,13 @@ int main(int argc,char **argv)
 
 	while(1)
 	{
-		size = mytbf_fetchtoken(tbf,BUFFERSIZE);
-		while((len=read(fd1,buf,size))<0)
+		while(!loop)
+			pause();
+		
+		// alarm(1);
+		loop = 0;
+		
+		while((len=read(fd1,buf,BUFFERSIZE))<0)
 		{
 			if(errno == EINTR)
 				continue;
@@ -53,13 +71,10 @@ int main(int argc,char **argv)
 		{
 			break;
 		}
-        if(size-len>0)
-        {
-            mytbf_returntoken(tbf,size-len);
-        }
+		
 		int i=0;
-		int pos = 0;
 
+		int pos = 0;
 		while(len>0)
 		{
 			i++;
@@ -76,7 +91,5 @@ int main(int argc,char **argv)
 		}
 	}
   	close(fd1);  
-	printf("\n");
-    mytbf_destory(tbf);
 	exit(0);
 }
