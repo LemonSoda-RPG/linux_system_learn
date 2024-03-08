@@ -72,7 +72,7 @@ int main(int argc,char **argv)
 		}
 	}
   	close(fd1);  
-
+	printf("\n");
     mytbf_destory(tbf);
 	exit(0);
 }

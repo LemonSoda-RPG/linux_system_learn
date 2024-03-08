@@ -55,7 +55,7 @@ static int inserttbf(void)
     }
     return -1;
 }
-struct mytbf_st *mytbf_init(int cps,int burst)
+mytbf_st *mytbf_init(int cps,int burst)
 {
     struct mytbf_st *st1;
     st1 = malloc(sizeof(*st1));
@@ -76,8 +76,10 @@ struct mytbf_st *mytbf_init(int cps,int burst)
     st1->index=i;
     return st1;
 }
-int mytbf_fetchtoken(struct mytbf_st *st,int n)  //返回值是实际取走了几个token
-{
+int mytbf_fetchtoken(mytbf_st *s,int n)  //返回值是实际取走了几个token
+{   
+    struct mytbf_st*st =s;
+
     int i=0;
     if(n<=0)
         return 0; 
@@ -94,8 +96,9 @@ int mytbf_fetchtoken(struct mytbf_st *st,int n)  //返回值是实际取走了�
     return n;
 }
 
-int mytbf_returntoken(struct mytbf_st *st,int n)
-{
+int mytbf_returntoken(mytbf_st *s,int n)
+{   
+    struct mytbf_st*st =s;
     if(n<=0)
     {
         return 0;
@@ -106,8 +109,10 @@ int mytbf_returntoken(struct mytbf_st *st,int n)
     return n;
 }
 
-int mytbf_destory(struct mytbf_st *st)
-{
+int mytbf_destory(mytbf_st *s)
+{   
+
+    struct mytbf_st*st =s;
     int index = st->index;
     free(st);
     tbflist[index]=NULL;
