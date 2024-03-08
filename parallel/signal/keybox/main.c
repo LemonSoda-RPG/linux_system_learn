@@ -21,7 +21,11 @@ int main(int argc,char **argv)
 		exit(1);
 	}
     tbf = mytbf_init(CPS,BURST);
-
+	if(tbf==NULL)
+	{
+		perror("mytbf_init");
+		exit(1);
+	}
 	do
 	{
 		fd1 = open(argv[1],O_RDONLY);
