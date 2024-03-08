@@ -8,13 +8,7 @@ typedef void (*sighandler_t)(int);
 static int inited = 0;
 static struct mytbf_st* tbflist[TBFSIZE];
 static sighandler_t sig;
-struct mytbf_st
-{
-    int cps;
-    int token;
-    int burst;
-    int index;
-};
+
 static void alrm_handler(int s)
 {
     alarm(1);
