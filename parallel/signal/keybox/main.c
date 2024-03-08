@@ -5,7 +5,7 @@
 #include <errno.h>
 #include <signal.h>
 #include "mytbf.h"
-#define CPS 	   300  //每秒加10个token  一个token是第一个字符
+#define CPS 	   100  //每秒加10个token  一个token是第一个字符
 #define BUFFERSIZE CPS
 #define BURST      1024
 
