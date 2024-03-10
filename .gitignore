@@ -1,4 +1,4 @@
 .vscode/
 Makefile
 *.o
-*.
+build
