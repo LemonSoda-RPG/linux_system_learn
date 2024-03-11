@@ -1,0 +1,8 @@
+cmake_minimum_required(VERSION 3.6)
+project(thread)
+add_executable(create1 create1.c)
+add_executable(cleanup cleanup.c)
+add_executable(primer0 primer0.c)
+add_executable(add add.c)
+
+# target_link_libraries(primer0 m)
