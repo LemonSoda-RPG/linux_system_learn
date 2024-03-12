@@ -6,20 +6,31 @@
 #define THRNUM 20
 #define BUFFERSIZE 1024
 #define FNAME "/tmp/out"
+
+static pthread_mutex_t mut = PTHREAD_MUTEX_INITIALIZER;
+
+
+
+
 static void *func(void* p)
 {
     FILE *fp;
     char buffer[BUFFERSIZE];
+    pthread_mutex_lock(&mut);
     fp = fopen(FNAME,"r+");
     if(fp ==NULL)
-    exit(1);
+        exit(1);
+    
+
+
     fgets(buffer,BUFFERSIZE,fp);
     fseek(fp,0,SEEK_SET);
     int number = atoi(buffer);
     number+=1;
-    sleep(1);
+    // sleep(1);
     fprintf(fp,"%d\n",number);
     fclose(fp);
+    pthread_mutex_unlock(&mut);
     pthread_exit(NULL);
 }
 int main()
@@ -38,4 +49,6 @@ int main()
     {
         pthread_join(pth_l[i],NULL);
     }
+    pthread_mutex_destroy(&mut);
+    exit(0);
 }

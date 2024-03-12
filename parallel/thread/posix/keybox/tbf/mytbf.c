@@ -2,23 +2,16 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <signal.h>
-#include <sys/time.h>
 #include "mytbf.h"
 #define TBFSIZE 1024
-// typedef void (*sighandler_t)(int);
+typedef void (*sighandler_t)(int);
 static int inited = 0;
 static struct mytbf_st* tbflist[TBFSIZE];
-// static sighandler_t sig;
-static struct sigaction sigsa;
-static struct sigaction sigsasave;
-static struct itimerval sigtm;
+static sighandler_t sig;
 
-static void alrm_action(int s,siginfo_t *infop,void *unused)
+static void alrm_handler(int s)
 {
-    // alarm(1);
-
-    if(infop->si_code!=SI_KERNEL)
-        return;
+    alarm(1);
     for(int i=0;i<TBFSIZE;i++)
     {
         if(tbflist[i]!=NULL)
@@ -32,18 +25,8 @@ static void alrm_action(int s,siginfo_t *infop,void *unused)
 static void module_unload(void)
 {
     int i;
-    // signal(SIGALRM,sig);
-    // alarm(0);
-    // sa版本
-    sigaction(SIGALRM,&sigsasave,NULL);
-
-    sigtm.it_value.tv_sec = 0;
-    sigtm.it_value.tv_usec = 0;
-    sigtm.it_interval.tv_sec = 0;
-    sigtm.it_interval.tv_usec = 0;
-    setitimer(ITIMER_REAL,&sigtm,NULL);
-
-
+    signal(SIGALRM,sig);
+    alarm(0);
     for(i=0;i<TBFSIZE;i++)
     {
         free(tbflist[i]);
@@ -52,27 +35,12 @@ static void module_unload(void)
 static void module_load(void)
 {
 
-    // sig = signal(SIGALRM,alrm_handler);
-    // alarm(1);
-    // sa版本
-   
-    sigsa.sa_sigaction = alrm_action;
-    sigemptyset(&sigsa.sa_mask);
-    sigsa.sa_flags = SA_SIGINFO;  //通过指定sa_flags,将信号处理函数指定为3参数的*sa_sigaction 而不是*sa_handler
-    sigaction(SIGALRM,&sigsa,&sigsasave); //SIGALRM信号有可能之前已经被使用了，所以这里要进行一下保存，之后进行回复
-    // if error
-    sigtm.it_value.tv_sec = 1;
-    sigtm.it_value.tv_usec = 0;
-    sigtm.it_interval.tv_sec = 1;
-    sigtm.it_interval.tv_usec = 0;
-    setitimer(ITIMER_REAL,&sigtm,NULL);
-    // if error
-
-
+    sig = signal(SIGALRM,alrm_handler);
+    alarm(1);
     atexit(module_unload);
 }
 
-static int inserttbf(void)
+static int lookindex(void)
 {
     for(int i=0;i<TBFSIZE;i++)
     {
@@ -95,7 +63,7 @@ mytbf_st *mytbf_init(int cps,int burst)
     st1->cps=cps;
     st1->burst=burst;
     st1->token = 0;
-    int i=inserttbf();
+    int i=lookindex();
     if(i<0)
         return NULL;
     tbflist[i]=st1;

@@ -4,5 +4,7 @@ add_executable(create1 create1.c)
 add_executable(cleanup cleanup.c)
 add_executable(primer0 primer0.c)
 add_executable(add add.c)
-
+add_executable(abcd abcd.c)
+add_executable(primer0_pool primer0_pool.c)
+add_executable(primer0_poolre primer0_poolre.c)
 # target_link_libraries(primer0 m)
