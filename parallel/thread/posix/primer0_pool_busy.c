@@ -6,7 +6,7 @@
 #include <pthread.h>
 #include <string.h>
 #define LEFT 300000500
-#define RIGHT 300001000
+#define RIGHT 300008000
 #define THREADNUM 4
 static pthread_mutex_t mut_num = PTHREAD_MUTEX_INITIALIZER;
 static pthread_t pthl[THREADNUM];

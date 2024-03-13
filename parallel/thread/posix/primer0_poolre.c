@@ -2,9 +2,9 @@
 #include<stdio.h>
 #include<pthread.h>
 #include<string.h>
-#define THNUM 4
-#define LEFT  300000
-#define RIGHT 400000
+#define THNUM 5
+#define LEFT 300000500
+#define RIGHT 300008000
 static pthread_t pthl[THNUM];
 static int number;
 static pthread_mutex_t mut_num = PTHREAD_MUTEX_INITIALIZER;
@@ -28,8 +28,6 @@ static void * func(void* p)
         number2=number;
         number=0;
         pthread_cond_broadcast(&con_num);
-
-
 
         pthread_mutex_unlock(&mut_num);
         for(int i=2;i<number2/2;i++)
@@ -67,7 +65,6 @@ int main()
         pthread_mutex_lock(&mut_num);
         while(number!=0)   //如果number！=0  说明number还没有被取走  我们要解锁 看有没有人能抢走
         {
-            
             pthread_cond_wait(&con_num,&mut_num);
         }
         number = i;
