@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <pthread.h>
 typedef void sem;
+
 struct sem
 {
     int threadnum;
