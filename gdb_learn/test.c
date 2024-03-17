@@ -1,6 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
-int i = 1;
+
 void f()
 {
 	printf("f is called!\n");
@@ -8,7 +8,7 @@ void f()
 int main()
 {
 	f();
-	i = 4;
+	
 	printf("hello world!  1\n");
 	printf("hello world!  2\n");
 	printf("hello world!  3\n");
