@@ -3,7 +3,7 @@
 体现在如果我们一直读不到内容 就会一直返回-1
 不断的假错
 */
-
+#include <poll.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/types.h>
@@ -23,10 +23,12 @@
 enum{
     STATE_R = 1,
     STATE_W,
-    STATE_AUTO,
+    STATE_AUTO, 
     STATE_EX,
     STATE_T,
 };
+
+
 struct fsm_st{
     int state;
     int sfd;
@@ -111,6 +113,7 @@ static int max(int fd1,int fd2)
 }
 void relay(int fd1,int fd2)
 {
+    struct pollfd fdlist[2];
     struct fsm_st fsm12,fsm21;
 
     memset(fsm12.buffer, 0, sizeof(fsm12.buffer));
@@ -131,47 +134,56 @@ void relay(int fd1,int fd2)
     fsm21.dfd = fd1;
     fsm21.sfd = fd2;
     // printf("断点2\n");
+
+    // 添加文件描述符
+    fdlist[0].fd = fd1;
+    fdlist[1].fd = fd2;
+   
     while(fsm12.state != STATE_T || fsm21.state != STATE_T)
     {
         // 布置监视任务
-        FD_ZERO(&rset);
-        FD_ZERO(&wset);
-        if(fsm12.state==STATE_R)  // 假如现在推到了读状态  我们将这个文件描述符加入到里面
-        {
-            FD_SET(fsm12.sfd,&rset);
+        fdlist[0].events = 0;
+        fdlist[1].events = 0;
+        
+        if(fsm12.state==STATE_R)
+        {   
+           fdlist[0].events |=  POLLIN;
         }
-        if(fsm12.state==STATE_W)   // 假如现在推到了写状态  我们将这个文件描述符加入到里面 
+        if(fsm12.state==STATE_W)
         {
-            FD_SET(fsm12.dfd,&wset);
+            fdlist[1].events |=  POLLOUT;
         }
-        if(fsm21.state==STATE_R)      //同上
+        if(fsm21.state==STATE_R)
         {
-            FD_SET(fsm21.sfd,&rset);
+            fdlist[1].events |=  POLLIN;
         }
-        if(fsm21.state==STATE_W)  //同上
+        if(fsm21.state==STATE_W)
         {
-            FD_SET(fsm21.dfd,&wset);
+            fdlist[0].events |=  POLLOUT;
         }
-        if(fsm12.state < STATE_AUTO ||fsm21.state<STATE_AUTO)
-        {
+
         // 监视
-            if(select(max(fd1,fd2)+1,&rset,&wset,NULL,NULL)<0)     //这里的监视 就是判断我们之前加入的文件描述符是否满足监视的条件  可读 后者 可写
-            {   // 在发生感兴趣的行为之前 一直等待 阻塞
+        if(fsm12.state < STATE_AUTO ||fsm21.state<STATE_AUTO)
+        {   
+
+
+            while(poll(fdlist,2,-1)<0)
+            {
                 if(errno == EINTR)
-                {   //如果是假错 文件描述符集合会被清空  所以要重新布置监视任务
+                {
                     continue;
                 }
-                perror("select");
+                perror("poll");
                 exit(1);
             }
-        
-            // 查看监视结果   满足可读  或者  可写  的条件下才会去进行驱动
-            if(FD_ISSET(fd1,&rset)||FD_ISSET(fd2,&wset))
+
+        // 查看监视结果
+            if(fdlist[0].revents&&POLLIN||fdlist[1].revents&&POLLOUT)
                 fsm_drive(&fsm12);
-            if(FD_ISSET(fd2,&rset)||FD_ISSET(fd1,&wset))
+            if(fdlist[1].revents&&POLLIN||fdlist[0].revents&&POLLOUT)
                 fsm_drive(&fsm21);
+
         }
-    }
     // printf("断点3\n");
 
     fcntl(fd1,F_SETFL,fd1_save);
