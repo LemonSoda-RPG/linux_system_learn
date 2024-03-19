@@ -1,3 +1,13 @@
+#include <sys/epoll.h>
+#include <stdio.h>
+#include <stdlib.h>
+int main()
+{
+    epoll_create
+    epoll_ctl
+    epoll_wait
+}
+
 /*
 这是一个忙等的程序
 体现在如果我们一直读不到内容 就会一直返回-1
