@@ -24,23 +24,14 @@ typedef struct msg_path_st
 typedef struct msg_data_st
 {   
     long mtype;
-    char data[DATAMAX];
     int datalen;
+    /*
+        如果datalen的值大于0  那就是数据包
+        如果datalen小于0 那么就是eot包
+    */
+    char data[DATAMAX];
+  
 }msg_data_t;
-
-typedef struct msg_eot_st
-{   
-    long mtype;
-    // char data[DATAMAX];
-    // int datalen;
-}msg_eot_t;
-union msg_s2c_un
-{
-    long mtype;
-    msg_data_t datamsg;
-    msg_eot_t eotmsg;
-};
-
 
 
 #endif

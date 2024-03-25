@@ -47,7 +47,7 @@ int main()
         wait(NULL);
         exit(0);
     }
-
-
-
-}
+    
+    
+    
+    }
