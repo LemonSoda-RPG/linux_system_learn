@@ -2,10 +2,19 @@
 #include<stdlib.h>
 #include <sys/ipc.h>
 #include <sys/msg.h>
+#include <signal.h>
 #include "proto.h"
-
+int msgid;
+void int_handler(int s)
+{
+    msgctl(msgid,IPC_RMID,NULL);
+    exit(0);
+}
 int main()
 {
+
+
+    signal(SIGINT,&int_handler);
     struct msg_st rbuf;
     key_t key;
     key = ftok(KEYPATH,KEYPROJ);
@@ -15,7 +24,7 @@ int main()
         exit(1);
     }
 
-    int msgid = msgget(key,IPC_CREAT|0600);  //创建并指定权限
+    msgid = msgget(key,IPC_CREAT|0600);  //创建并指定权限
     if(msgid<0)
     {
         perror("ftok");
@@ -32,7 +41,7 @@ int main()
         printf("math = %d\n",rbuf.math);
         printf("chinese = %d\n",rbuf.chinese);
     }
-    msgctl(msgid,IPC_RMID,NULL);  //销毁不需要继续传参
+    // msgctl(msgid,IPC_RMID,NULL);  //销毁不需要继续传参
 
 
     exit(0);
