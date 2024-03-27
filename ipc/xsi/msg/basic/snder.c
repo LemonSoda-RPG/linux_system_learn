@@ -21,8 +21,7 @@ int main()
     sbuf.chinese = rand()%100; 
     strcpy(sbuf.name,"alan");
     sbuf.math = rand()%100; 
-    
-
+    // sbuf这里的sbuf其实是一个指针 如果发送的是多个消息，那么这个指针就是数组的起始指针
     if(msgsnd(msgid,&sbuf,sizeof(sbuf)-sizeof(long),0)<0)
     {
         perror("");
