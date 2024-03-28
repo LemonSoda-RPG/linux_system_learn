@@ -19,6 +19,7 @@ int main()
     if(ptr ==MAP_FAILED)
     {
         perror("");
+        exit(1);
     }
     pid = fork();
     if(pid<0)
