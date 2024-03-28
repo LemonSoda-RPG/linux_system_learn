@@ -29,12 +29,14 @@ int main()
         perror("");
         exit(1);
     }
-    int val =1;
-    if(setsockopt(sd,SOL_SOCKET,SO_BROADCAST,&val,sizeof(val))<0)
-    {
-        perror("");
-        exit(1);
-    }
+
+
+    // int val =1;
+    // if(setsockopt(sd,SOL_SOCKET,SO_BROADCAST,&val,sizeof(val))<0)
+    // {
+    //     perror("");
+    //     exit(1);
+    // }
 
     socklen_t sockrelen = sizeof(sockin);
     while(1)

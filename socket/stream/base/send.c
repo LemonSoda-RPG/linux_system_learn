@@ -24,7 +24,6 @@ int main(int argc,char **argv)
     }
     struct sockaddr_in sockre;
     struct msg_st *sbufp;
-    struct msg_st sss;
 
     int sd;
     sd = socket(PF_INET,SOCK_DGRAM,0);
@@ -33,12 +32,17 @@ int main(int argc,char **argv)
         perror("错误1");
         exit(1);
     }
+
+
     int val =1;
     if(setsockopt(sd,SOL_SOCKET,SO_BROADCAST,&val,sizeof(val))<0)
     {
-        perror("");
+        perror("setsockopt");
         exit(1);
     }
+    
+    
+    
     size_t size = sizeof(struct msg_st)+strlen(argv[2]);
     sbufp = malloc(size);
   
@@ -54,7 +58,7 @@ int main(int argc,char **argv)
     sockre.sin_port = htons(atoi(RCVPORT));
     // sockre.sin_addr.s_addr = inet_addr(argv[1]);
     // inet_pton(AF_INET,argv[1],&sockre.sin_addr);
-    inet_pton(AF_INET,"255,255,255,255",&sockre.sin_addr);
+    inet_pton(AF_INET,"255.255.255.255",&sockre.sin_addr);
     if(sendto(sd,sbufp,size,0,(void*)&sockre,sizeof(sockre))<0)
     {
         perror("错误2");
