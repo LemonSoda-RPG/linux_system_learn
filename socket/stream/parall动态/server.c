@@ -35,8 +35,8 @@ struct server_st
 };
 static int sock_local;
 static struct server_st *serverpool;
-static int idle_count;
-static int busy_count;
+static int idle_count=0;
+static int busy_count=0;
 static void sr2_handler(int s)
 {
     return;
@@ -55,15 +55,17 @@ static int del_1_server(void)
             kill(serverpool[index].pid,SIGTERM);
             serverpool[index].pid = -1;
             idle_count--;
+            break;
         }
     }
+    return 0;
 }
 static void server_job(int index)
 {   
     socklen_t lenr;
     struct sockaddr_in addrremote;
     int sock_remote;
-    char *linebuf;
+    char linebuf[LINEBUFSIZE];
     char ipstr[IPSTRSIZE];
     int ppid = getppid();
     while(1)
@@ -85,14 +87,15 @@ static void server_job(int index)
         kill(ppid,SIG_NOTIFY);
         inet_ntop(AF_INET,&addrremote.sin_addr,ipstr,IPSTRSIZE);
         // printf("[%d]client:%s:%d",getpid(),ipstr,ntohs(addrremote.sin_port));
-        long long stamp = time(NULL);
-        int len = snprintf(linebuf,(size_t)LINEBUFSIZE,FMT_STAMP,stamp);
+       
+        // int len = snprintf(linebuf,(size_t)LINEBUFSIZE,FMT_STAMP,stamp);
+        int len = sprintf(linebuf,FMT_STAMP,(long long)time(NULL));
+        
         send(sock_remote,linebuf,len,0);
         sleep(5);
         close(sock_remote);
-
+        
     }
-
 
 }
 static int add_1_server(void)
@@ -126,9 +129,8 @@ static int add_1_server(void)
         serverpool[index].pid = pid;
         idle_count ++;
     }
-
+    return 0;
 }
-
 static void scan_pool(void)
 {
     int idle = 0,busy=0;
@@ -212,7 +214,7 @@ int main()
     addrlocal.sin_family = AF_INET;
     addrlocal.sin_port = htons(atoi(SERVERPORT));
     inet_pton(AF_INET,"0.0.0.0",&addrlocal.sin_addr);
-    if(bind(sock_local,(struct sockaddr*)&addrlocal,sizeof(addrlocal))<0)
+    if(bind(sock_local,(void*)&addrlocal,sizeof(addrlocal))<0)
     {
         perror("bind()");
         exit(1);
@@ -252,14 +254,25 @@ int main()
         }
         for(int i = 0;i<MAXCLIENT;i++)
         {
-            if(serverpool[i].pid>0)
-            {
+            if(serverpool[i].pid==-1)
+            {   
+                putchar('\'');
                 //打印进程状态
             }
+            else if(serverpool[i].state==STATE_IDEL)
+            {
+                putchar('.');
+            }
+            else
+            {
+                putchar('x');
+            }
+
         }
+        putchar('\n');
 
     }
 
     sigprocmask(SIG_SETMASK,&oset,NULL);  //恢复之前的信号
-
+    exit(0);
 }

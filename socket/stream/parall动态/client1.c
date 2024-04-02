@@ -8,7 +8,6 @@
 #include <arpa/inet.h>
 int main(int argc,char **argv)
 {
-    
     long long stamp;
     if(argc<2)
     {
@@ -33,18 +32,18 @@ int main(int argc,char **argv)
         exit(1);
     }
     // printf("1\n");
-    fflush(NULL);
+   
     FILE *fp;
     fp = fdopen(remote_sd,"r+");
     // printf("2\n");
-    fflush(NULL);
+   
     if(fp==NULL)
     {
         perror("fdopen");
         exit(1);
     }
     // printf("3\n");
-    fflush(NULL);
+  
     if(fscanf(fp,FMT_STAMP,&stamp)<1)
     {
         fprintf(stderr,"bad format!\n");
