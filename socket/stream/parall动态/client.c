@@ -8,7 +8,7 @@
 #include <arpa/inet.h>
 int main(int argc,char **argv)
 {
-    
+    printf("123");
     long long stamp;
     if(argc<2)
     {

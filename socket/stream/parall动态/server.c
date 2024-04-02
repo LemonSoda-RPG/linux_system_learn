@@ -37,9 +37,9 @@ static int sock_local;
 static struct server_st *serverpool;
 static int idle_count;
 static int busy_count;
-static void* sr2_handler(int s)
+static void sr2_handler(int s)
 {
-    return NULL;
+    return;
 }
 static int del_1_server(void)
 {
@@ -70,7 +70,7 @@ static void server_job(int index)
     {
         serverpool[index].state = STATE_IDEL;
         kill(ppid,SIG_NOTIFY);
-        sock_remote = accept(sock_local,&addrremote,&lenr);  
+        sock_remote = accept(sock_local,(void*)&addrremote,&lenr);  
         //这里是阻塞，可能被信号打断。如果出错，判断是不是被信号打断的
         if(sock_remote<0)
         {
@@ -91,14 +91,11 @@ static void server_job(int index)
         sleep(5);
         close(sock_remote);
 
-
-
-
     }
 
 
 }
-static void add_1_server(void)
+static int add_1_server(void)
 {
     if(idle_count+busy_count>=MAXCLIENT)
     {
@@ -112,7 +109,6 @@ static void add_1_server(void)
             break;
         }
     }
-
     serverpool[index].state = STATE_IDEL;
     pid_t pid = fork();
     if(pid<0)
@@ -130,8 +126,6 @@ static void add_1_server(void)
         serverpool[index].pid = pid;
         idle_count ++;
     }
-
-
 
 }
 
@@ -168,13 +162,9 @@ static void scan_pool(void)
 
 }
 
-
-
-
 int main()
 {
 
-    
     struct sigaction sa,oldsa;
     sigemptyset(&sa.sa_mask);
     sa.sa_flags = SA_NOCLDWAIT;
@@ -191,8 +181,6 @@ int main()
     sigaddset(&set,SIG_NOTIFY); //将自定义新号添加到信号集合当中
     sigprocmask(SIG_BLOCK,&set,&oset);  // 将信号集合中的信号设置为block
 
-
-
     serverpool = mmap(NULL,sizeof(struct server_st) * MAXCLIENT, PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
     if(serverpool == MAP_FAILED)
     {
@@ -205,20 +193,16 @@ int main()
     }
 
 
-
-
-
     int val = 1;
     struct sockaddr_in addrlocal;
     
-
     sock_local = socket(AF_INET,SOCK_STREAM,0);
     if(sock_local<0)
     {
         perror("socket");
         exit(1);
     }
-    
+
     if(setsockopt(sock_local,SOL_SOCKET,SO_REUSEADDR,&val,sizeof(val))<0)
     {
         perror("setsockopt()");
@@ -238,7 +222,6 @@ int main()
         perror("listen()");
         exit(1);
     }
-
 
 
     for(int i=0;i<MINISPARESERVER;i++)
@@ -277,11 +260,6 @@ int main()
 
     }
 
-
-
-
-
     sigprocmask(SIG_SETMASK,&oset,NULL);  //恢复之前的信号
-
 
 }
