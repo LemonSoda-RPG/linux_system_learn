@@ -22,6 +22,14 @@ int main(int argc,char **argv)
         perror("");
         exit(1);
     }
+
+    int val = 1;
+    if(setsockopt(remote_sd,SOL_SOCKET,SO_REUSEADDR,&val,sizeof(val))<0)
+    {
+        perror("setsockopt()");
+        exit(1);
+    }
+
     struct sockaddr_in remoteaddr;
     remoteaddr.sin_family=AF_INET;
     remoteaddr.sin_port = htons(atoi(SERVERPORT));
