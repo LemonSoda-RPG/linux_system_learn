@@ -1,10 +1,22 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <unistd.h>
 #include "anytimer.h"
-
+static void f1(void*p)
+{
+    printf("f1():%s\n",p);
+}
+static void f2(void*p)
+{
+    printf("f2():%s\n",p);
+}
+static void f3(void*p)
+{
+    printf("f3():%s\n",p);
+}
 int main()
 {
-    // f1 = at_jobfunc_t()
+   
 
     int job1,job2,job3;
     puts("begin!");
@@ -15,14 +27,20 @@ int main()
 
     }
 
-    job2 = at_addjob(3,f2,"333");
+    job2 = at_addjob_repeat(3,f2,"333");
     job3 = at_addjob(4,f3,"444");
+    
+
+
+    at_waitjob(job1);
+    at_waitjob(job3);
+    // at_waitjob(job2);
     
     puts("end!");
     while(1)
     {
-        write();
-        sleep();
+        write(1,".",1);
+        sleep(1);
     }
     exit(0);
 }
