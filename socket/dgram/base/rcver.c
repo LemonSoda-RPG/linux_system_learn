@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdint.h>
-#include "proto.h"
+#include <proto.h>
 #include <netinet/in.h>
 #include <sys/socket.h>
 #include <string.h>

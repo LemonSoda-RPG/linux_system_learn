@@ -3,7 +3,4 @@
 #include <stdint.h>
 typedef uint8_t chid_t;
 
-
-
-
 #endif

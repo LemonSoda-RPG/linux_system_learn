@@ -1,6 +1,6 @@
 #ifndef PROTO_H
 #define PROTO_H
-#include "site_type.h"
+#include <site_type.h>
 #define DEFAULT_MGROUP      "224.2.2.2"
 #define DEFAULT_PCVPORT     "8077"
 #define CHNNR               100

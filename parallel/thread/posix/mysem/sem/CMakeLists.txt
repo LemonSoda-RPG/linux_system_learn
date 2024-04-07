@@ -1,1 +1,0 @@
-add_library(sem SHARED mysem.c)

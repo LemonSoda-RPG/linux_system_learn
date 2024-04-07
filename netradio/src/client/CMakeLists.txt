@@ -1,6 +1,2 @@
-cmake_minimum_required(VERSION 3.20)
-project(client)
-
-
-
-add_executable()
+aux_source_directory(. DIR_SRCS)
+add_executable(client ${DIR_SRCS})

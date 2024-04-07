@@ -3,7 +3,7 @@
 #include<pthread.h>
 #include<string.h>
 #include<unistd.h>
-#include "sem/mysem.h"
+#include "mysem.h"
 #define MAX 5
 #define LEFT 30000001
 #define RIGHT 30000200

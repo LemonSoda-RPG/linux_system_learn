@@ -10,8 +10,7 @@
 #include <netinet/in.h> 
 #include <errno.h>
 #include <net/if.h>
-
-#include "../include/proto.h"
+#include "proto.h"
 
 /*
     -M --mgroup  指定多播放组
@@ -100,7 +99,7 @@ int main(int argc,char **argv)
     }
     
 
-    
+
     sd_local =  socket(AF_INET,SOCK_DGRAM,0);
     
     if(sd_local<0)

@@ -1,16 +1,14 @@
 #include<stdlib.h>
 #include<stdio.h>
-#include <semaphore.h>
+#include<semaphore.h>
 #include<pthread.h>
 #include<string.h>
 #include<unistd.h>
-
 #define MAX 5
 #define LEFT 30000001
 #define RIGHT 30000200
 static pthread_t pthl[RIGHT-LEFT+1];
 static sem_t sem;
-
 static void * func(void* p)
 {
     int *n =p;
