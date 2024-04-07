@@ -1,1 +1,1 @@
-/usr/sbin/cc -g CMakeFiles/Demo.dir/main.c.o -o Demo  tbf/libtbffunctions.a 
+/usr/bin/cc -g CMakeFiles/Demo.dir/main.c.o -o Demo  tbf/libtbffunctions.a 

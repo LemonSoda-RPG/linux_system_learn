@@ -1,0 +1,5 @@
+cmake_minimum_required(VERSION 3.8)
+project(hello)
+find_package(OpenMP REQUIRED)
+link_libraries(OpenMP::OpenMP_CXX)
+add_executable(hello helloworld.c)

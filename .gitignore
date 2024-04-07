@@ -3,4 +3,3 @@ Makefile
 *.o
 .idea/
 build
-*Make*

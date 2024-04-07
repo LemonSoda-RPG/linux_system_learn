@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <client.h>
+#include "client.h"
 #include <unistd.h>
 #include <getopt.h>
 #include <net/if.h>
@@ -98,6 +98,8 @@ int main(int argc,char **argv)
                 break;
         }
     }
+    
+
     
     sd_local =  socket(AF_INET,SOCK_DGRAM,0);
     
@@ -244,7 +246,10 @@ int main(int argc,char **argv)
             {   
                 fprintf(stdout,"accepted msg:%d recieved.\n",msg_channel->chid);
                 //坚持写够len-sizeof(chid_t)个字节
-                writen(pd[1],msg_channel->data,len-sizeof(chid_t));
+                if(writen(pd[1],msg_channel->data,len-sizeof(chid_t))<0)
+                {
+                    exit(1);
+                }
             }
         }
 

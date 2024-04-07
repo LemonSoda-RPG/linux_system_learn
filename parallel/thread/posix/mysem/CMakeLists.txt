@@ -1,0 +1,7 @@
+cmake_minimum_required(VERSION 3.6)
+message("当前工作目录：${CMAKE_CURRENT_SOURCE_DIR}")
+project(mysem)
+link_libraries(${CMAKE_CURRENT_SOURCE_DIR}/libsem.so)
+# add_subdirectory(sem)
+add_executable(hahaha main.c)
+target_include_directories(hahaha PUBLIC include)
