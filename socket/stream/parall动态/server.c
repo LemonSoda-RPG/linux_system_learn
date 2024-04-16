@@ -14,7 +14,7 @@
 #include <sys/mman.h>
 
 /*
-    有两种进程  忙碌  空闲
+    有三种进程  忙碌  空闲  未被启用的进程
     空闲进程的最小数量 为5  最大为10
     空闲与忙碌进程相加不能超过20个
 */
@@ -39,9 +39,9 @@ static int idle_count=0;
 static int busy_count=0;
 
 static void sr2_handler(int s);
-static int del_1_server(void);
+static int  del_1_server(void);
 static void server_job(int index);
-static int add_1_server(void);
+static int  add_1_server(void);
 static void scan_pool(void);
 
 int main()
@@ -49,8 +49,8 @@ int main()
 
     struct sigaction sa,oldsa;
     sigemptyset(&sa.sa_mask);
-    sa.sa_flags = SA_NOCLDWAIT;
-    sa.sa_handler = SIG_IGN;  //SIGCHLD当子进程终止时，会发出这个新号
+    sa.sa_flags = SA_NOCLDWAIT; //  让父进程自动回收 而不需要显式的调用wait函数
+    sa.sa_handler = SIG_IGN;  //SIGCHLD当子进程终止时，会发出这个信号
     sigaction(SIGCHLD,&sa,&oldsa);  //意思是  这个信号就是告诉不需要收尸
 
     sa.sa_handler = sr2_handler;
@@ -90,6 +90,7 @@ int main()
         exit(1);
     }
     //SO_REUSEADDR选项允许套接字重新使用本地地址和端口 因为有可能连接还没有结束导致无法使用同一个端口
+    //  参数分别是  套接字   设置所在的层级  进行的具体的设置 设置的开关地址起始  开关的长度 
     if(setsockopt(sock_local,SOL_SOCKET,SO_REUSEADDR,&val,sizeof(val))<0)
     {
         perror("setsockopt()");
@@ -119,8 +120,8 @@ int main()
     }
     while(1)
     {
-        // 在while循环中检查进程池的状态，并根据当前状态选择删除线程或者创建线程
-
+        //  在while循环中检查进程池的状态，并根据当前状态选择删除线程或者创建线程
+        //  任何未被阻塞的信号都可以打断sigsuspend的阻塞
         sigsuspend(&oset);  //在执行到这句之前，我们的自定义信号SIG_NOTIFY被我们设置成了阻塞，运行这句话之后，函数会停止于此，阻塞。
                             //同时，会恢复到oset状态，是临时恢复，在我们的oset中，SIG_NOTIFY是unblock状态，然后我们就可以通过向函数发送
                             //SIG_NOTIFY信号，使函数取消阻塞，继续执行，同时SIG_NOTIFY被再次设置为阻塞
@@ -211,7 +212,7 @@ static void server_job(int index)
         }
         serverpool[index].state = STATE_BUSY;
         
-        kill(ppid,SIG_NOTIFY);
+        kill(ppid,SIG_NOTIFY);  //每次变更状态都要通知父进程遍历一次线程池的状态
         inet_ntop(AF_INET,&addrremote.sin_addr,ipstr,IPSTRSIZE);
        
         int len = sprintf(linebuf,FMT_STAMP,(long long)time(NULL));
@@ -249,6 +250,7 @@ static int add_1_server(void)
     {
         //我们在serverjob里改变idleconunt和busycount是没有用的 因为这里已经是子进程了
         //在子进程里修改变量对父进程无效
+        //如果我们想要使用全局变量 那么还要使用互斥锁
         server_job(index);
         exit(0);
     }
@@ -270,6 +272,7 @@ static void scan_pool(void)
         }
         if(kill(serverpool[i].pid,0))
         {
+            printf("这里有一个线程没有了，但是没有被设置为-1");
             serverpool[i].pid = -1;
             continue;
         }
