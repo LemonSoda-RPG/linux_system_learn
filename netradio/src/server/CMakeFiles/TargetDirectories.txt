@@ -1,0 +1,3 @@
+/home/jc/linux_c/netradio/src/server/CMakeFiles/mytbflib.dir
+/home/jc/linux_c/netradio/src/server/CMakeFiles/edit_cache.dir
+/home/jc/linux_c/netradio/src/server/CMakeFiles/rebuild_cache.dir

@@ -2,7 +2,9 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <glob.h>
+#include <fcntl.h>
 #include "medialib.h"
+#include "mytbf.h"
 struct channel_context_st
 {
     chid_t chid;

@@ -1,3 +1,2 @@
-aux_source_directory(. DIR_SRCS)
-add_executable(server ${DIR_SRCS}
-        server_conf.h)
+
+add_library(mytbflib mytbf.c mytbf.h)
