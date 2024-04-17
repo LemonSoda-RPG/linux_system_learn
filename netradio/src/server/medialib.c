@@ -1,7 +1,18 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include <sys/msg.h>
+#include <unistd.h>
+#include <glob.h>
 #include "medialib.h"
+struct channel_context_st
+{
+    chid_t chid;
+    char *desc;
+    glob_t mp3glob;
+    int pos;
+    int fd;
+    off_t offset;
+    mytbf_t *tbf;
+};
 int mlib_getchnlist(struct mlib_listentry_st*[],int *)
 {
 

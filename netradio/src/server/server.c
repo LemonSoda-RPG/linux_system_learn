@@ -208,11 +208,13 @@ int main(int argc,char **argv)
     /*
      * 创建频道线程
      */
-    for(int i = 0;i<CHNNR;i++)
+    int i = 0;
+    for(i = 0;i<CHNNR;i++)
     {
-        
         thr_channel_create(list+i);
     }
+    syslog(LOG_DEBUG,"%d channel threads created.",i);
+    
 
 
 
