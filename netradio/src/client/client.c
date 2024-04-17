@@ -9,7 +9,6 @@
 #include <sys/socket.h>
 #include <netinet/in.h> 
 #include <errno.h>
-#include <net/if.h>
 #include "proto.h"
 
 /*
@@ -121,6 +120,9 @@ int main(int argc,char **argv)
         exit(1);
     }
     int value=1;
+
+    // 这个函数是干嘛的
+    // 功能是 假如你是多播组中的信息发送方，通过这个设置可以使自己也能收到自己发送的数据
     setsockopt(sd_local,IPPROTO_IP,IP_MULTICAST_LOOP,&value,sizeof(value));
 
     struct sockaddr_in addrlo;

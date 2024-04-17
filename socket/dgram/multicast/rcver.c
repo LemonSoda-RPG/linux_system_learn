@@ -35,7 +35,12 @@ int main()
 
     inet_pton(AF_INET,"0.0.0.0",&mreq.imr_address);
 
-
+      //加入多播组
+    if(setsockopt(sd,IPPROTO_IP,IP_ADD_MEMBERSHIP,&mreq,sizeof(mreq))<0)
+    {
+        perror("");
+        exit(1);
+    }
 
     mreq.imr_ifindex = if_nametoindex("eth0");
 
@@ -47,12 +52,7 @@ int main()
 
 
     
-    //加入多播组
-    if(setsockopt(sd,IPPROTO_IP,IP_ADD_MEMBERSHIP,&mreq,sizeof(mreq))<0)
-    {
-        perror("");
-        exit(1);
-    }
+  
 
     socklen_t sockrelen = sizeof(sockin);
     while(1)
