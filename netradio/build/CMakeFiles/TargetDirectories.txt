@@ -1,0 +1,8 @@
+/home/jc/linux_c/netradio/build/CMakeFiles/edit_cache.dir
+/home/jc/linux_c/netradio/build/CMakeFiles/rebuild_cache.dir
+/home/jc/linux_c/netradio/build/src/client/CMakeFiles/client.dir
+/home/jc/linux_c/netradio/build/src/client/CMakeFiles/edit_cache.dir
+/home/jc/linux_c/netradio/build/src/client/CMakeFiles/rebuild_cache.dir
+/home/jc/linux_c/netradio/build/src/server/CMakeFiles/server.dir
+/home/jc/linux_c/netradio/build/src/server/CMakeFiles/edit_cache.dir
+/home/jc/linux_c/netradio/build/src/server/CMakeFiles/rebuild_cache.dir

@@ -1,0 +1,1 @@
+/usr/sbin/cc CMakeFiles/Demo.dir/anytimer_re.c.o CMakeFiles/Demo.dir/main.c.o -o Demo 

@@ -1,0 +1,1 @@
+/usr/sbin/gcc -g CMakeFiles/block.dir/block.c.o -o block 

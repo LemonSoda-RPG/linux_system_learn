@@ -1,0 +1,2 @@
+/usr/sbin/ar qc libmedialib.a CMakeFiles/medialib.dir/medialib.o
+/usr/sbin/ranlib libmedialib.a

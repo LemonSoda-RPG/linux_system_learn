@@ -1,0 +1,8 @@
+[
+{
+  "directory": "/home/jc/linux_c/build",
+  "command": "/usr/sbin/gcc   -g -o CMakeFiles/block.dir/block.c.o -c /home/jc/linux_c/parallel/signal/block.c",
+  "file": "/home/jc/linux_c/parallel/signal/block.c",
+  "output": "CMakeFiles/block.dir/block.c.o"
+}
+]

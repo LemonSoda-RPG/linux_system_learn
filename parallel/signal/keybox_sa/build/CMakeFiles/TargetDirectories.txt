@@ -1,0 +1,6 @@
+/home/jc/linux_c/parallel/signal/keybox_sa/build/CMakeFiles/Demo.dir
+/home/jc/linux_c/parallel/signal/keybox_sa/build/CMakeFiles/edit_cache.dir
+/home/jc/linux_c/parallel/signal/keybox_sa/build/CMakeFiles/rebuild_cache.dir
+/home/jc/linux_c/parallel/signal/keybox_sa/build/tbf/CMakeFiles/tbffunctions.dir
+/home/jc/linux_c/parallel/signal/keybox_sa/build/tbf/CMakeFiles/edit_cache.dir
+/home/jc/linux_c/parallel/signal/keybox_sa/build/tbf/CMakeFiles/rebuild_cache.dir

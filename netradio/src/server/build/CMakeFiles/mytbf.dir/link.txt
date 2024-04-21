@@ -1,0 +1,2 @@
+/usr/sbin/ar qc libmytbf.a CMakeFiles/mytbf.dir/mytbf.o
+/usr/sbin/ranlib libmytbf.a

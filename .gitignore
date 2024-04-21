@@ -1,5 +1,2 @@
 .vscode/
-Makefile
-*.o
 .idea/
-build
