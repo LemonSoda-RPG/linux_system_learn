@@ -3,22 +3,31 @@
 #include <getopt.h>
 #include <unistd.h>
 #include <syslog.h>
-#include "medialib.h"
-#include <sys/types.h>
 #include <sys/stat.h>
-#include <signal.h>
+#include <features.h>
 #include <sys/types.h>          /* See NOTES */
 #include <sys/socket.h>
 #include <fcntl.h>
 #include <arpa/inet.h>
 #include <netinet/in.h>
 #include <net/if.h>
+#include <signal.h>
+#include "medialib.h"
 #include "proto.h"
 #include "site_type.h"
 #include "server_conf.h"
 #include "thr_list.h"
 #include "thr_channel.h"
-
+int serversd;
+static struct mlib_listentry_st *list;
+struct server_conf_st server_default_conf = {
+    .rcvport = DEFAULT_PCVPORT,
+    .mgroup = DEFAULT_MGROUP,
+    .media_dir = DEFAULT_MEDIADIR,
+    .runmode = RUN_DAEMON,
+    .ifname = DEFAULT_IF
+};
+struct sockaddr_in sndaddr;
 static int daemonzize()
 {
     pid_t pid = fork();
@@ -51,17 +60,20 @@ static int daemonzize()
         exit(0);
     }
 }
-static void *daemon_exit(int s)
+static void daemon_exit(int s)
 {
+    thr_list_destory();
+    thr_channel_destoryall();
+    mlib_freechnlist(list);
     closelog();
     exit(0);
 }
-static void socket_init(void)
+static int socket_init(void)
 {
     struct ip_mreqn mreq;
     // int val = 1;
     
-    int serversd = socket(AF_INET,SOCK_DGRAM,0);
+    serversd = socket(AF_INET,SOCK_DGRAM,0);
     if(serversd<0)
     {
         syslog(LOG_ERR,"socket");
@@ -76,6 +88,18 @@ static void socket_init(void)
         syslog(LOG_ERR,"setsocket:");
         exit(1);
     }
+
+    // bind()
+
+    sndaddr.sin_family = AF_INET;
+    sndaddr.sin_port = htons(atoi(server_default_conf.rcvport));
+    inet_pton(AF_INET,server_default_conf.mgroup,&sndaddr.sin_addr);
+    return 0;
+
+
+
+
+
 }
 int main(int argc,char **argv)
 {
@@ -97,21 +121,16 @@ int main(int argc,char **argv)
             {"directory",1,NULL,'D'},
             {NULL,0,NULL,0}
     };
-    struct server_conf_st server_default_conf = {
-        .rcvport = DEFAULT_PCVPORT,
-        .mgroup = DEFAULT_MGROUP,
-        .media_dir = DEFAULT_MEDIADIR,
-        .runmode = RUN_DAEMON,
-        .ifname = DEFAULT_IF
-    };
+   
 
 
     struct sigaction sa;
+    
     sa.sa_handler = daemon_exit;
-    sigemptyset(&sa.sa_flags);
-    sigaddset(&sa.sa_flags,SIGTERM);
-    sigaddset(&sa.sa_flags,SIGINT);
-    sigaddset(&sa.sa_flags,SIGQUIT);
+    sigemptyset(&sa.sa_mask);
+    sigaddset(&sa.sa_mask,SIGTERM);
+    sigaddset(&sa.sa_mask,SIGINT);
+    sigaddset(&sa.sa_mask,SIGQUIT);
     sigaction(SIGTERM,&sa,NULL);
     sigaction(SIGINT,&sa,NULL);
     sigaction(SIGQUIT,&sa,NULL);
@@ -157,10 +176,10 @@ int main(int argc,char **argv)
 
     }
 
-
+    printf("hahahah\n");
     // 将服务器端设置为守护进程
     if(server_default_conf.runmode==RUN_DAEMON) {
-        if(daemonize()!=0)
+        if(daemonzize()!=0)
         {
             exit(1);
         }
@@ -178,27 +197,28 @@ int main(int argc,char **argv)
         // fprintf(stderr,"EINVAL\n");
         exit(1);
     }
-
+    printf("hahahah\n");
 
     /*
      * socket初始化
      * */
     
     socket_init();
-
+    printf("1hahahah\n");
     /*
      * 获取频道信息
      * */
     int list_size;
     int err;
-    struct mlib_listentry_st *list;
-    err = mlib_getchnlist(list,&list_size);
+    
+    err = mlib_getchnlist(&list,&list_size);
+    printf("2hahahah\n");
     if(err<0)
     {
         syslog(LOG_ERR,"mlib_getchnlist");
         exit(1);
     }
-
+    printf("3hahahah\n");
     /*
      *
      * 创建节目单线程
@@ -210,8 +230,14 @@ int main(int argc,char **argv)
      */
     int i = 0;
     for(i = 0;i<CHNNR;i++)
-    {
-        thr_channel_create(list+i);
+    {   //为什么这里可以直接传递指针呢  因为这里并不是动态分配内存
+        //不对  也是动态分配内存 但是结构体占用的内存与结构体中的描述字符串占用的内存并不在同一块空间
+        //因此 在这个结构体数组中，每个结构体所占用的空间大小都是一样的，因此可以通过下标进行遍历
+        err = thr_channel_create(list+i);
+        if(err)
+        {
+            syslog(LOG_WARNING,"err = thr_channel_create %d",i);
+        }
     }
     syslog(LOG_DEBUG,"%d channel threads created.",i);
     

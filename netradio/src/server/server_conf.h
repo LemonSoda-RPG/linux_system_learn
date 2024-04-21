@@ -21,8 +21,7 @@ struct server_conf_st{
 
 };
 extern struct server_conf_st server_default_conf;
-
-
-
+extern int serversd;
+extern struct sockaddr_in sndaddr;
 
 #endif //NETRADIO_SERVER_CONF_H
