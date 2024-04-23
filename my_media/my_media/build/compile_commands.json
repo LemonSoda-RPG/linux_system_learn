@@ -1,0 +1,44 @@
+[
+{
+  "directory": "/home/jc/linux_c/netradio/build/src/client",
+  "command": "/usr/sbin/gcc  -I/home/jc/linux_c/netradio/include -g -o CMakeFiles/client.dir/client.c.o -c /home/jc/linux_c/netradio/src/client/client.c",
+  "file": "/home/jc/linux_c/netradio/src/client/client.c",
+  "output": "src/client/CMakeFiles/client.dir/client.c.o"
+},
+{
+  "directory": "/home/jc/linux_c/netradio/build/src/server",
+  "command": "/usr/sbin/gcc  -I/home/jc/linux_c/netradio/include -I/home/jc/linux_c/netradio/src/server/../../include -g -o CMakeFiles/server.dir/medialib.c.o -c /home/jc/linux_c/netradio/src/server/medialib.c",
+  "file": "/home/jc/linux_c/netradio/src/server/medialib.c",
+  "output": "src/server/CMakeFiles/server.dir/medialib.c.o"
+},
+{
+  "directory": "/home/jc/linux_c/netradio/build/src/server",
+  "command": "/usr/sbin/gcc  -I/home/jc/linux_c/netradio/include -I/home/jc/linux_c/netradio/src/server/../../include -g -o CMakeFiles/server.dir/mytbf.c.o -c /home/jc/linux_c/netradio/src/server/mytbf.c",
+  "file": "/home/jc/linux_c/netradio/src/server/mytbf.c",
+  "output": "src/server/CMakeFiles/server.dir/mytbf.c.o"
+},
+{
+  "directory": "/home/jc/linux_c/netradio/build/src/server",
+  "command": "/usr/sbin/gcc  -I/home/jc/linux_c/netradio/include -I/home/jc/linux_c/netradio/src/server/../../include -g -o CMakeFiles/server.dir/server.c.o -c /home/jc/linux_c/netradio/src/server/server.c",
+  "file": "/home/jc/linux_c/netradio/src/server/server.c",
+  "output": "src/server/CMakeFiles/server.dir/server.c.o"
+},
+{
+  "directory": "/home/jc/linux_c/netradio/build/src/server",
+  "command": "/usr/sbin/gcc  -I/home/jc/linux_c/netradio/include -I/home/jc/linux_c/netradio/src/server/../../include -g -o CMakeFiles/server.dir/server_conf.c.o -c /home/jc/linux_c/netradio/src/server/server_conf.c",
+  "file": "/home/jc/linux_c/netradio/src/server/server_conf.c",
+  "output": "src/server/CMakeFiles/server.dir/server_conf.c.o"
+},
+{
+  "directory": "/home/jc/linux_c/netradio/build/src/server",
+  "command": "/usr/sbin/gcc  -I/home/jc/linux_c/netradio/include -I/home/jc/linux_c/netradio/src/server/../../include -g -o CMakeFiles/server.dir/thr_channel.c.o -c /home/jc/linux_c/netradio/src/server/thr_channel.c",
+  "file": "/home/jc/linux_c/netradio/src/server/thr_channel.c",
+  "output": "src/server/CMakeFiles/server.dir/thr_channel.c.o"
+},
+{
+  "directory": "/home/jc/linux_c/netradio/build/src/server",
+  "command": "/usr/sbin/gcc  -I/home/jc/linux_c/netradio/include -I/home/jc/linux_c/netradio/src/server/../../include -g -o CMakeFiles/server.dir/thr_list.c.o -c /home/jc/linux_c/netradio/src/server/thr_list.c",
+  "file": "/home/jc/linux_c/netradio/src/server/thr_list.c",
+  "output": "src/server/CMakeFiles/server.dir/thr_list.c.o"
+}
+]

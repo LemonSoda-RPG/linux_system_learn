@@ -1,0 +1,1 @@
+/usr/bin/cc CMakeFiles/stdsem.dir/main_sem.c.o -o stdsem 

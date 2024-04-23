@@ -1,0 +1,2 @@
+/usr/bin/ar qc libsemlib.a CMakeFiles/semlib.dir/src/mysem.c.o
+/usr/bin/ranlib libsemlib.a

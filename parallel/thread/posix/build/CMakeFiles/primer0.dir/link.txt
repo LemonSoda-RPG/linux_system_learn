@@ -1,0 +1,1 @@
+/usr/bin/cc CMakeFiles/primer0.dir/primer0.c.o -o primer0 

@@ -1,0 +1,1 @@
+/usr/bin/cc CMakeFiles/primer0_pool.dir/primer0_pool.c.o -o primer0_pool 

@@ -1,0 +1,1 @@
+/usr/bin/cc CMakeFiles/abcdcopy.dir/abcdcopy.c.o -o abcdcopy 

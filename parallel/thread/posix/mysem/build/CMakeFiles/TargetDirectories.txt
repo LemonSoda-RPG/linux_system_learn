@@ -1,0 +1,5 @@
+/home/jiacheng/linux_system_learn/parallel/thread/posix/mysem/build/CMakeFiles/semlib.dir
+/home/jiacheng/linux_system_learn/parallel/thread/posix/mysem/build/CMakeFiles/mysem.dir
+/home/jiacheng/linux_system_learn/parallel/thread/posix/mysem/build/CMakeFiles/stdsem.dir
+/home/jiacheng/linux_system_learn/parallel/thread/posix/mysem/build/CMakeFiles/edit_cache.dir
+/home/jiacheng/linux_system_learn/parallel/thread/posix/mysem/build/CMakeFiles/rebuild_cache.dir

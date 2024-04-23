@@ -1,0 +1,10 @@
+/home/jiacheng/linux_system_learn/parallel/thread/posix/build/CMakeFiles/create1.dir
+/home/jiacheng/linux_system_learn/parallel/thread/posix/build/CMakeFiles/cleanup.dir
+/home/jiacheng/linux_system_learn/parallel/thread/posix/build/CMakeFiles/primer0.dir
+/home/jiacheng/linux_system_learn/parallel/thread/posix/build/CMakeFiles/add.dir
+/home/jiacheng/linux_system_learn/parallel/thread/posix/build/CMakeFiles/abcd.dir
+/home/jiacheng/linux_system_learn/parallel/thread/posix/build/CMakeFiles/primer0_pool_busy.dir
+/home/jiacheng/linux_system_learn/parallel/thread/posix/build/CMakeFiles/primer0_poolre.dir
+/home/jiacheng/linux_system_learn/parallel/thread/posix/build/CMakeFiles/abcdcopy.dir
+/home/jiacheng/linux_system_learn/parallel/thread/posix/build/CMakeFiles/edit_cache.dir
+/home/jiacheng/linux_system_learn/parallel/thread/posix/build/CMakeFiles/rebuild_cache.dir

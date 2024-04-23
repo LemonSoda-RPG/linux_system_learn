@@ -1,0 +1,3 @@
+/home/jiacheng/linux_system_learn/parallel/thread/openmp/build/CMakeFiles/hello.dir
+/home/jiacheng/linux_system_learn/parallel/thread/openmp/build/CMakeFiles/edit_cache.dir
+/home/jiacheng/linux_system_learn/parallel/thread/openmp/build/CMakeFiles/rebuild_cache.dir

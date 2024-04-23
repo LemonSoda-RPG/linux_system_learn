@@ -1,0 +1,1 @@
+/usr/bin/cc CMakeFiles/mytbf.dir/main.c.o -o mytbf  tbf/libtbffunctions.a 

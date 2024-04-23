@@ -1,0 +1,6 @@
+/home/jiacheng/linux_system_learn/parallel/thread/posix/keybox/build/CMakeFiles/mytbf.dir
+/home/jiacheng/linux_system_learn/parallel/thread/posix/keybox/build/CMakeFiles/edit_cache.dir
+/home/jiacheng/linux_system_learn/parallel/thread/posix/keybox/build/CMakeFiles/rebuild_cache.dir
+/home/jiacheng/linux_system_learn/parallel/thread/posix/keybox/build/tbf/CMakeFiles/tbffunctions.dir
+/home/jiacheng/linux_system_learn/parallel/thread/posix/keybox/build/tbf/CMakeFiles/edit_cache.dir
+/home/jiacheng/linux_system_learn/parallel/thread/posix/keybox/build/tbf/CMakeFiles/rebuild_cache.dir

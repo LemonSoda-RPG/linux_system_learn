@@ -1,0 +1,1 @@
+/usr/bin/cc CMakeFiles/cleanup.dir/cleanup.c.o -o cleanup 

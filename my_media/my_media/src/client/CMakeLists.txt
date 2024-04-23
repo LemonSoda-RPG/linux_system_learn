@@ -1,0 +1,8 @@
+cmake_minimum_required(VERSION 3.10)
+project(client)
+SET(CMAKE_BUILD_TYPE "Debug")  
+SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -Wall")
+# set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g")
+include_directories(../../include)
+aux_source_directory(. DIR_SRCS)
+add_executable(client ${DIR_SRCS})
