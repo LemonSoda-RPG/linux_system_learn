@@ -62,6 +62,8 @@ static int daemonzize()
 }
 static void daemon_exit(int s)
 {
+
+    // 退出  销毁所有
     thr_list_destory();
     thr_channel_destoryall();
     mlib_freechnlist(list);
@@ -79,10 +81,12 @@ static int socket_init(void)
         syslog(LOG_ERR,"socket");
         exit(1);
     }
-    inet_pton(AF_INET,server_default_conf.mgroup,&mreq.imr_address);
+    // 这是创建多播组的参数
+    inet_pton(AF_INET,server_default_conf.mgroup,&mreq.imr_multiaddr);
     inet_pton(AF_INET,"0.0.0.0",&mreq.imr_address);
     mreq.imr_ifindex = if_nametoindex(server_default_conf.ifname);
     socklen_t len = sizeof(mreq);
+
     if(setsockopt(serversd,IPPROTO_IP,IP_MULTICAST_IF,&mreq,len)<0)
     {
         syslog(LOG_ERR,"setsocket:");
@@ -90,7 +94,7 @@ static int socket_init(void)
     }
 
     // bind()
-
+    // 这是发送目标的参数  发送到多播组 并且指定端口
     sndaddr.sin_family = AF_INET;
     sndaddr.sin_port = htons(atoi(server_default_conf.rcvport));
     inet_pton(AF_INET,server_default_conf.mgroup,&sndaddr.sin_addr);
@@ -122,7 +126,12 @@ int main(int argc,char **argv)
     struct sigaction sa;
     
     sa.sa_handler = daemon_exit;
+
+    // 对信号集进行清空
     sigemptyset(&sa.sa_mask);
+    // 将信号添加到信号集
+    // 信号集中的信号在调用信号处理函数时会被屏蔽  避免重入  重入就是信号处理函数还没有运行完成，又来了一个信号，会导致再次触发信号处理函数
+    // 标准信号与实时信号
     sigaddset(&sa.sa_mask,SIGTERM);
     sigaddset(&sa.sa_mask,SIGINT);
     sigaddset(&sa.sa_mask,SIGQUIT);
@@ -205,7 +214,7 @@ int main(int argc,char **argv)
      * */
     int list_size;
     int err;
-    
+    // 这里传递的是指针的指针
     err = mlib_getchnlist(&list,&list_size);
     if(err<0)
     {

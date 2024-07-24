@@ -4,12 +4,13 @@
 #include<pthread.h>
 #include <unistd.h>
 #include"mytbf.h"
+// 多线程并发版
 struct mytbf_t
 {
-    int cps;
-    int burst;
-    int token;
-    int pos;
+    int cps;        // 每一秒的增量
+    int burst;      // 上限
+    int token;      // 当前的数量
+    int pos;        // 这个令牌的下标  因为我们为每一个频道都设置了一个令牌 所以是一个数组
     pthread_mutex_t mut;
     pthread_cond_t cond;
 
@@ -24,6 +25,7 @@ static void *thr_alrm(void*p)
     while(1)
     {
         pthread_mutex_lock(&mut_job);
+        // 每一秒 遍历所有进程的令牌  并加token  如果总大小大于burst了  就设置当前token为burst
         for(int i=0;i<MYTBF_MAX;i++)
         {
             if(job[i]!=NULL)
@@ -42,6 +44,7 @@ static void *thr_alrm(void*p)
     }
     return NULL;
 }
+
 static int get_free_pos_unlocked()
 {
     for(int i=0;i<MYTBF_MAX;i++)
@@ -72,6 +75,8 @@ static void module_load(void)
     }
     atexit(module_unload);
 }
+
+// 这个函数应该数在循环中被多次调用的  用于给每一个频道配置令牌
 mytbf_t* mytbf_init(int cps,int burst)
 {
     struct mytbf_t *me;
@@ -87,6 +92,8 @@ mytbf_t* mytbf_init(int cps,int burst)
     pthread_mutex_init(&me->mut,NULL);
     pthread_cond_init(&me->cond,NULL);
     pthread_mutex_lock(&mut_job);
+
+     // 这里是对job数组进行加锁
     int pos = get_free_pos_unlocked(); 
     if(pos<0)
     {
@@ -107,6 +114,7 @@ int mytbf_fetchtoken(mytbf_t* ptr,int size)  //取token
     pthread_mutex_lock(&me->mut);
     while (me->token<=0)
     {
+        // 条件机制  解锁  把锁让给添加令牌的进程
         pthread_cond_wait(&me->cond,&me->mut);
     }
     n = min(me->token,size);
@@ -139,6 +147,8 @@ int mytbf_destory(mytbf_t* ptr)       //销毁
     free(ptr);
     return 0;
 }
+
+// 查看剩余令牌数量
 int mytbf_checktoken(mytbf_t *ptr) {
     int token_left = 0;
     struct mytbf_t *me = ptr;

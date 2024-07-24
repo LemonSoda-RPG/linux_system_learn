@@ -16,6 +16,8 @@
 
 // msg_channel_st与msg_list_st 是同等级的
 
+// 我们在网络中传输的就这两种包
+// msg_channel_st 和 msg_list_st
 // 频道数据包
 struct msg_channel_st
 {
@@ -26,6 +28,9 @@ struct msg_channel_st
     // 这个大小取决于音频的质量  码率  如果码率很大  可以设置大一点
     uint8_t data[1];
 }__attribute__((packed));   //不需要进行对齐
+
+
+
 
 // 节目单结构体
 struct msg_listentry_st 
