@@ -5,8 +5,6 @@ file(REMOVE_RECURSE
   "CMakeFiles/server.dir/mytbf.c.o.d"
   "CMakeFiles/server.dir/server.c.o"
   "CMakeFiles/server.dir/server.c.o.d"
-  "CMakeFiles/server.dir/server_conf.c.o"
-  "CMakeFiles/server.dir/server_conf.c.o.d"
   "CMakeFiles/server.dir/thr_channel.c.o"
   "CMakeFiles/server.dir/thr_channel.c.o.d"
   "CMakeFiles/server.dir/thr_list.c.o"

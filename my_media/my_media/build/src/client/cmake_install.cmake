@@ -1,4 +1,4 @@
-# Install script for directory: /home/jc/linux_c/netradio/src/client
+# Install script for directory: /home/jc/linux_system_learn/my_media/my_media/src/client
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -29,7 +29,7 @@ endif()
 
 # Install shared libraries without execute permission?
 if(NOT DEFINED CMAKE_INSTALL_SO_NO_EXE)
-  set(CMAKE_INSTALL_SO_NO_EXE "0")
+  set(CMAKE_INSTALL_SO_NO_EXE "1")
 endif()
 
 # Is this installation the result of a crosscompile?
@@ -39,6 +39,6 @@ endif()
 
 # Set default install directory permissions.
 if(NOT DEFINED CMAKE_OBJDUMP)
-  set(CMAKE_OBJDUMP "/usr/sbin/objdump")
+  set(CMAKE_OBJDUMP "/usr/bin/objdump")
 endif()
 

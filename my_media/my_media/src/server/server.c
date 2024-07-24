@@ -95,11 +95,6 @@ static int socket_init(void)
     sndaddr.sin_port = htons(atoi(server_default_conf.rcvport));
     inet_pton(AF_INET,server_default_conf.mgroup,&sndaddr.sin_addr);
     return 0;
-
-
-
-
-
 }
 int main(int argc,char **argv)
 {
@@ -134,6 +129,7 @@ int main(int argc,char **argv)
     sigaction(SIGTERM,&sa,NULL);
     sigaction(SIGINT,&sa,NULL);
     sigaction(SIGQUIT,&sa,NULL);
+    // 配置LOG_PERROR 意思是在输入到日志的同时 在标准错误也进行输出  但是使用守护进程就无法输出了
     openlog("netradio",LOG_PERROR|LOG_PID,LOG_DAEMON);
     while(1)
     {
@@ -175,6 +171,8 @@ int main(int argc,char **argv)
         }
 
     }
+
+    syslog(LOG_ERR,"hahahahahahahah");
 
     // 将服务器端设置为守护进程
     if(server_default_conf.runmode==RUN_DAEMON) {

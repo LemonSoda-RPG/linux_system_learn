@@ -1,2 +1,0 @@
-/usr/sbin/ar qc libthr_list.a CMakeFiles/thr_list.dir/thr_list.c.o
-/usr/sbin/ranlib libthr_list.a

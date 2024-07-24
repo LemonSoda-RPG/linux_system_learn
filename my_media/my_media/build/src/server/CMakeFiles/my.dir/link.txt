@@ -1,2 +1,0 @@
-/usr/sbin/ar qc libmy.a CMakeFiles/my.dir/medialib.c.o
-/usr/sbin/ranlib libmy.a

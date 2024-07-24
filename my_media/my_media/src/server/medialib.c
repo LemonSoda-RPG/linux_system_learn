@@ -109,6 +109,8 @@ int mlib_getchnlist(struct mlib_listentry_st** result,int *resnumber)
         channel[i].chid = -1;
     }
     //对路径进行解析
+    printf("%s/*",server_default_conf.media_dir);
+
     snprintf(path,PATHSIZE,"%s/*",server_default_conf.media_dir);
     if(glob(path,0,NULL,&globres))
     {   

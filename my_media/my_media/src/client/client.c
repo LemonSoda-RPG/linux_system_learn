@@ -11,7 +11,7 @@
 #include <string.h>
 #include <errno.h>
 #include "proto.h"
-#define BUFSIZE 320*1024/8*20
+#define BUFSIZE 320*1024/8*20  //能够存储20秒的音乐
 /*
     -M --mgroup  指定多播放组
     -P --port   指定端口
@@ -53,15 +53,18 @@ int main(int argc,char **argv)
 参数优先级 命令行参数最优先
 
 */  
-
+    // 建立管道进行父子进程通信
     int pd[2]; 
     int ret = 0;
     int choseid;
     socklen_t len;
     int pid;
     int sd_local;
+    // 接收数据缓冲区
     uint64_t receive_buf_size = BUFSIZE;
     int c=0;
+
+
     struct ip_mreqn mreq;
     int index = 0;
     //对长参数进行设置 指定是否需要传参  对于长参数 1 来判断是否需要参数
@@ -100,7 +103,9 @@ int main(int argc,char **argv)
     }
     
 
+    // socket(AF_INET,SOCK_STREAM,0);
 
+    // 创建套接字
     sd_local =  socket(AF_INET,SOCK_DGRAM,0);
     
     if(sd_local<0)
@@ -108,14 +113,17 @@ int main(int argc,char **argv)
         perror("socket()");
         exit(1);
     }
+    
+    // 将主机端转化为网络端
     inet_pton(AF_INET,client_conf.mgroup,&mreq.imr_multiaddr);
 
     inet_pton(AF_INET,"0.0.0.0",&mreq.imr_address);
 
     mreq.imr_ifindex = if_nametoindex("eth0");
-    // mreq.imr_multiaddr;
     
     len = sizeof(mreq);
+    // 对网络套接字进行一些属性设置
+
     if(setsockopt(sd_local,IPPROTO_IP,IP_ADD_MEMBERSHIP,&mreq,len)<0)
     {
         perror("setsockopt()");
@@ -142,7 +150,7 @@ int main(int argc,char **argv)
     }
 
 
-
+    // 创建
     if(pipe(pd)<0)   //父进程写 子进程读
     {
         perror("pipe");
@@ -164,6 +172,8 @@ int main(int argc,char **argv)
         dup2(pd[0],0); 
         //这个时候pd[0]和0这两个文件描述符所指向的文件结构是同一个。
         //因此关闭pd[0]，我们还可以用0
+
+        // 为什么这里要这样 是因为我们的命令只能从标准输入读取数据  所以要将我们的管道的读取接口重定向到标准输入
         if(pd[0]>0)
         {
             close(pd[0]);
@@ -192,6 +202,7 @@ int main(int argc,char **argv)
         }
         while(1)
         {
+            // 持续接收数据  直到收到频道单
             len = recvfrom(sd_local,\
             msg_list,\
             MSG_LIST_MAX,\
@@ -221,10 +232,24 @@ int main(int argc,char **argv)
         
         struct msg_listentry_st *pos;
 
+
+/**
+ * struct msg_list_st
+    {
+        //节目单
+        chid_t chid;
+        struct msg_listentry_st entry[1]; 
+    }__attribute__((packed));
+ */
+        // 一开始指针指向 struct msg_listentry_st entry  
+        // 直到读取到节目单的尾部为止   len就是节目单数据的总大小
+        // pose每次位移 pos->len 个大小 这个大小应该是每个频道的信息的总大小
+        // 对节目单进行遍历
         for(pos = msg_list->entry; (char*)pos<((char*)msg_list+len);pos=(void*)(((char*)pos)+ntohs(pos->len)))
         {
             printf("channel %d:%s\n",pos->chid,pos->desc);
         }
+        // 用完我们就可以把内存释放了
         free(msg_list);
         while(ret<1)
         {
@@ -235,6 +260,7 @@ int main(int argc,char **argv)
                 exit(1);
             }
         }
+        // 创建接收用数据包
         struct msg_channel_st *msg_channel;
         msg_channel = malloc(MSG_CHANNEL_MAX);
         if(msg_channel==NULL)
@@ -243,59 +269,17 @@ int main(int argc,char **argv)
             exit(1);
         }
 
-
+        // 接收缓冲区
         char rcvbuf[BUFSIZE];
         uint32_t offset = 0;
         memset(rcvbuf, 0, BUFSIZE);
         int bufct = 0; // buffer count
 
 
-
-        // while(1)
-        // {
-        //     len = recvfrom(sd_local,
-        //                     msg_channel,
-        //                     MSG_CHANNEL_MAX,
-        //                     0,
-        //                     (void*)&raddr1,
-        //                     &raddr_len1);
-
-        //     if(raddr1.sin_addr.s_addr!=raddr.sin_addr.s_addr||raddr1.sin_port!=raddr.sin_port)
-        //     {
-        //         fprintf(stderr,"ignore:address not match\n");
-        //         continue;
-        //     }
-        //     if(len<sizeof(struct msg_channel_st))
-        //     {
-        //         fprintf(stderr,"ignore:message too small\n");
-        //         continue;
-        //     }
-        //     if(msg_channel->chid==choseid)
-        //     {   
-        //         fprintf(stdout,"accepted msg:%d recieved.\n",msg_channel->chid);
-        //         //坚持写够len-sizeof(chid_t)个字节
-
-
-        //         memcpy(rcvbuf + offset, msg_channel->data, len - sizeof(chid_t));
-        //         offset += (len - sizeof(chid_t));
-        //         if (bufct++ % 4 == 0){
-        //             if(writen(pd[1],rcvbuf,offset)<0)
-        //             {
-        //                 printf("读取数据错误 结束\n");
-        //                 exit(1);
-        //             }
-        //             offset = 0;
-        //         }
-        //     }
-        // }
-
-
-
-
-         while(1)
+        while(1)
         {
 
-
+            // 这里是接收所有的数据包  后面的代码会对我们选择的频道进行过滤
             len = recvfrom(sd_local,
                             msg_channel,
                             MSG_CHANNEL_MAX,
@@ -303,11 +287,15 @@ int main(int argc,char **argv)
                             (void*)&raddr1,
                             &raddr_len1);
 
+            // 对接收到的信息进行判断  
+            // 对地址进行判断
             if(raddr1.sin_addr.s_addr!=raddr.sin_addr.s_addr||raddr1.sin_port!=raddr.sin_port)
             {
                 fprintf(stderr,"ignore:address not match\n");
                 continue;
             }
+            // struct msg_channel_st  我们定义的这个结构体的大小就是就是包的最小值了  因为里面不含数据
+            // 假如比这个还小  那么一定是出错了
             if(len<sizeof(struct msg_channel_st))
             {
                 fprintf(stderr,"ignore:message too small\n");
@@ -318,10 +306,18 @@ int main(int argc,char **argv)
                 fprintf(stdout,"accepted msg:%d recieved.\n",msg_channel->chid);
                 //坚持写够len-sizeof(chid_t)个字节
 
-
+                // 将数据写入到我们的缓冲区
+                // 参数  写入的起始地址  写入的数据    要写入的数据的长度 len是总长度 减去chid的长度就是数据的长度
                 memcpy(rcvbuf + offset, msg_channel->data, len - sizeof(chid_t));
                 offset += (len - sizeof(chid_t));
+
+
+
+                // 为了能够流畅的播放  服务端应该发送数据适当快一些   1.1或者1.2倍
                 if (bufct++ % 2 == 0){
+                    // 写缓冲 每次攒够两次才会进行写入
+
+                    // 写够offset个字节
                     if(writen(pd[1],rcvbuf,offset)<0)
                     {
                         printf("读取数据错误 结束\n");
@@ -336,13 +332,6 @@ int main(int argc,char **argv)
         close(pd[1]);
         close(sd_local);
         exit(0);
-
-        
     }
-
-
-
-
-
 
 }

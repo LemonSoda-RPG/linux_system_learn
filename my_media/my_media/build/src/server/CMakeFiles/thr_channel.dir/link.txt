@@ -1,2 +1,0 @@
-/usr/sbin/ar qc libthr_channel.a CMakeFiles/thr_channel.dir/thr_channel.c.o
-/usr/sbin/ranlib libthr_channel.a

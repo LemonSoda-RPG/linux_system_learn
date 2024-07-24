@@ -8,15 +8,11 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/home/jc/linux_c/netradio/src/client/client.c" "src/client/CMakeFiles/client.dir/client.c.o" "gcc" "src/client/CMakeFiles/client.dir/client.c.o.d"
+  "/home/jc/linux_system_learn/my_media/my_media/src/client/client.c" "src/client/CMakeFiles/client.dir/client.c.o" "gcc" "src/client/CMakeFiles/client.dir/client.c.o.d"
   )
 
-# Targets to which this target links which contain Fortran sources.
-set(CMAKE_Fortran_TARGET_LINKED_INFO_FILES
-  )
-
-# Targets to which this target links which contain Fortran sources.
-set(CMAKE_Fortran_TARGET_FORWARD_LINKED_INFO_FILES
+# Targets to which this target links.
+set(CMAKE_TARGET_LINKED_INFO_FILES
   )
 
 # Fortran module output directory.
