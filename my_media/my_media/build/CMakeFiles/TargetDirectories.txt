@@ -1,8 +1,0 @@
-/home/jc/linux_system_learn/my_media/my_media/build/CMakeFiles/edit_cache.dir
-/home/jc/linux_system_learn/my_media/my_media/build/CMakeFiles/rebuild_cache.dir
-/home/jc/linux_system_learn/my_media/my_media/build/src/client/CMakeFiles/client.dir
-/home/jc/linux_system_learn/my_media/my_media/build/src/client/CMakeFiles/edit_cache.dir
-/home/jc/linux_system_learn/my_media/my_media/build/src/client/CMakeFiles/rebuild_cache.dir
-/home/jc/linux_system_learn/my_media/my_media/build/src/server/CMakeFiles/server.dir
-/home/jc/linux_system_learn/my_media/my_media/build/src/server/CMakeFiles/edit_cache.dir
-/home/jc/linux_system_learn/my_media/my_media/build/src/server/CMakeFiles/rebuild_cache.dir

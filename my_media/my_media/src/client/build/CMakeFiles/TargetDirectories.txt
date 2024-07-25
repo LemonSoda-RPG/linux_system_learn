@@ -1,3 +1,0 @@
-/home/jc/桌面/my_media/src/client/build/CMakeFiles/rebuild_cache.dir
-/home/jc/桌面/my_media/src/client/build/CMakeFiles/client.dir
-/home/jc/桌面/my_media/src/client/build/CMakeFiles/edit_cache.dir

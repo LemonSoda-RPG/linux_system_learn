@@ -14,16 +14,19 @@ static struct mlib_listentry_st *list_entry;
 static void* thr_list(void*p)
 {
     int totalsize;
-    
+    // 这是用于网络传输的结构体
     struct msg_listentry_st *entryptr; //  保存单个频道的信息  指针 指向所有信息
     int ret; 
     int size;
     totalsize = sizeof(chid_t);  //节目单频道id是0 
+    //strlen的长度不包含 "\0"
+    // msg_listentry_st 中字符串正好初始化长度为1  用于存放"\0"
+    // 遍历所有频道信息 统计要发送的总大小
     for(int i=0;i<num_list_entry;i++)
     {
         totalsize+=sizeof(struct msg_listentry_st)+strlen(list_entry[i].desc);
     }
-    
+    // 分配内存
     entrylistptr = malloc(totalsize);
     if(entrylistptr==NULL)
     {
@@ -31,6 +34,7 @@ static void* thr_list(void*p)
         exit(1);
     }
     entrylistptr->chid = LISTCHNID;  //节目单频道号
+    // 节目单数组
     entryptr = entrylistptr->entry;
     syslog(LOG_DEBUG,"频道的数量为： %d",num_list_entry);
 
@@ -65,6 +69,7 @@ static void* thr_list(void*p)
 }
 int thr_list_create(struct mlib_listentry_st* me,int size)
 {   
+    // 频道数量
     num_list_entry = size;
     list_entry = me;
     int err;

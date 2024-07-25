@@ -225,6 +225,9 @@ int main(int argc,char **argv)
      *
      * 创建节目单线程
      * */
+
+    // list 存储的是简单的数据  只有id和描述
+    // 不过对于节目单线程  足够了
     thr_list_create(list,list_size);
 
     /*
